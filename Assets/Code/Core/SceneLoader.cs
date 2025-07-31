@@ -9,15 +9,16 @@ public class SceneLoader : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern
         if (Instance != null && Instance != this)
         {
+            Debug.LogWarning($"[SceneLoader] Duplicate found in scene '{gameObject.scene.name}'. Destroying...");
             Destroy(gameObject);
             return;
         }
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        Debug.Log($"[SceneLoader] Initialized in scene '{gameObject.scene.name}'.");
     }
 
     public void LoadScene(string sceneName)
@@ -25,6 +26,7 @@ public class SceneLoader : MonoBehaviour
         if (isLoading) return;
 
         isLoading = true;
+        Debug.Log($"[SceneLoader] Loading scene: {sceneName}");
         SceneManager.LoadScene(sceneName);
         isLoading = false;
     }
