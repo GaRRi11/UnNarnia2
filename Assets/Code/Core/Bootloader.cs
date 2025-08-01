@@ -1,21 +1,34 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Bootloader : MonoBehaviour
 {
     [SerializeField] private GameObject gameManagerPrefab;
 
-    void Awake()
+    private void Awake()
     {
-        // Instantiate manager if not already present
         if (GameManager.Instance == null)
         {
             Instantiate(gameManagerPrefab);
         }
+    }
 
-        // You can also instantiate other startup managers here
+    private void Start()
+    {
+        // Delay 1 frame so that SceneLoader and LoadingUI singletons are initialized
+        StartCoroutine(LoadMainMenuNextFrame());
+    }
 
-        // Now load the main menu or game
-        SceneManager.LoadScene("MainMenu");
+    private System.Collections.IEnumerator LoadMainMenuNextFrame()
+    {
+        yield return null;
+
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene("MainMenu");
+        }
+        else
+        {
+            Debug.LogError("SceneLoader.Instance is null!");
+        }
     }
 }

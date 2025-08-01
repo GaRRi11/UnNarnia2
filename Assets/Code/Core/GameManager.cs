@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class GameManager : MonoBehaviour
     public int CurrentRoom { get; set; } = 1;
     public bool IsRetryingAfterAd { get; set; } = false;
 
+    // Optional: Event when state changes
+    public event Action<GameState> OnGameStateChanged;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,23 +39,26 @@ public class GameManager : MonoBehaviour
 
     public void SetState(GameState newState)
     {
-        CurrentState = newState;
+        if (CurrentState == newState)
+            return;
 
+        CurrentState = newState;
+        Debug.Log($"[GameManager] State changed to: {newState}");
+
+        // Control time scale for certain states
         switch (newState)
         {
             case GameState.MainMenu:
-                Debug.Log("[GameManager] State changed to: MainMenu");
-                break;
             case GameState.Playing:
-                Debug.Log("[GameManager] State changed to: Playing");
+                Time.timeScale = 1f;
                 break;
             case GameState.Paused:
-                Debug.Log("[GameManager] State changed to: Paused");
-                break;
             case GameState.GameOver:
-                Debug.Log("[GameManager] State changed to: GameOver");
+                Time.timeScale = 0f;
                 break;
         }
+
+        OnGameStateChanged?.Invoke(newState); // Optional: Notify listeners
     }
 
     public void ResetGameState()
