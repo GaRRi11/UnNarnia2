@@ -6,7 +6,7 @@ public class MainMenuUI : MonoBehaviour
     public void StartGame()
     {
         // Load your first game scene
-        SceneLoader.Instance.LoadScene("GameLevel01");
+    SceneLoader.Instance.LoadScene("LevelSelectionScene");
     }
 
     public void OpenSettings()
