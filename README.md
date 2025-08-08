@@ -1,4 +1,4 @@
-## Description
+# Description
 
 This is a work-in-progress Unity 3D game project currently focused on building the core game structure and flow before developing full gameplay mechanics.
 
